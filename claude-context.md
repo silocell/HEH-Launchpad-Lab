@@ -20,7 +20,7 @@ DNS at GoDaddy, pages on GitHub Pages with HTTPS.
 | helpers.civilinitiatives.org | `HEH-Helpers` | The helper panel: the same `index.html` as HEH-Maintenance-, kept identical (copy it across after every change). Owners who land here go to maintenance.; helpers on maintenance. come here. |
 | lab.civilinitiatives.org | `HEH-Launchpad-Lab` | Test copy, made-up pupils. Purple bar, flask icon. Server: `hehs.duckdns.org`. |
 | gaterun.civilinitiatives.org | `HEH-Launchpad-Game` | Gate Run, the Three.js driving game. |
-| games.civilinitiatives.org | `HEH-Launchpad-Scratch` | The six Scratch games. |
+| play.civilinitiatives.org | `HEH-Launchpad-Scratch` | The six Scratch games. |
 | learn.civilinitiatives.org | `HEH-Launchpad-Learn` | Level Up, Times Table Tycoon, Word Dragons, Battle Stories. |
 | silocell.github.io | `silocell.github.io` | Shiv's portfolio page. |
 
