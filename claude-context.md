@@ -107,11 +107,16 @@ rather than carrying their own copy.
   the `ocarun` user.
 - The technical explainer allows 15 questions a day, at most 5 of them Claude
   (`ASK_LIMIT` in `admin` and `askclaude`).
-- **Games on/off per account** (since 27 Oct): admin panel → Games. Uses the
-  `gamesaccess` function (owner only) to write `public.game_access`
-  (`user_id`, `allowed`, `reason`). Every game page asks `my_games()`; a new
-  account has no row, so it sees "Games aren't switched on for your account
-  yet" until it's turned on there.
+- **Games per account** (since 27 Oct): admin panel → Games, three settings:
+  **Games off**, **Learning only**, **All games**. Uses the `gamesaccess`
+  function (owner only) to write `public.game_access` (`user_id`, `allowed`,
+  `level` = `learning`|`all`, `reason`). Every game page loads `games-gate.js`
+  with `data-kind="fun"` (Scratch games, Arcade), `"learning"` (Tycoon, Word
+  Dragons, Battle Stories, Map Quest, Gate Run) or `"hub"` (Games page) and
+  asks `my_games()`, which returns `{allowed, level}`. Learning-only accounts
+  are locked out of fun pages; the dashboard hides the doodle of the day and
+  the fun tiles; the Games page hides the fun groups. Level Up, Flash Cards
+  and My Progress are never locked. A new account has no row = games off.
 
 ## The lab server
 
