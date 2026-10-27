@@ -88,6 +88,26 @@ rather than carrying their own copy.
 - `chaos.js` – lab only: a "Break things" panel for fault testing, including a
   "Through my SSH tunnel" option that points the lab at localhost:8000.
 
+## The live server (real site)
+
+- Oracle Cloud, `HEH-Live`, public IP 140.238.91.12, address
+  **`hehs-live.duckdns.org`**. Self-hosted Supabase in `~/supabase`, same layout
+  as the lab. `COMPOSE_FILE` in `.env` adds `docker-compose.override.yml`,
+  `docker-compose.azure.yml` and `docker-compose.google.yml`.
+- Caddy only passes through what the website uses (`/auth`, `/rest`,
+  `/realtime`, `/storage`, `/functions`, `/graphql`). **Everything else answers
+  "Nothing here." on purpose**, including the database dashboard. That's not a
+  fault. To use the dashboard: SSH tunnel `-L 8000:localhost:8000`, then
+  http://localhost:8000 (username `shiv`). The project is named
+  HEHS-Homework-Launchpad (`STUDIO_DEFAULT_PROJECT` in `.env`).
+- Sign in with Microsoft and Google are both on (Google since 27 Oct).
+- **Run Command works since 27 Oct** (dynamic group + policy `heh-run-command`),
+  so commands can be sent from Oracle Cloud Shell or the Console
+  (Instance → Management → Run command) even without an SSH key. It runs as
+  the `ocarun` user.
+- The technical explainer allows 15 questions a day, at most 5 of them Claude
+  (`ASK_LIMIT` in `admin` and `askclaude`).
+
 ## The lab server
 
 - Oracle Cloud free tier, ARM VM (1 OCPU, 6 GB since 24 Oct; was 2 OCPU, 12 GB), Oracle Linux 9, public IP
@@ -117,15 +137,15 @@ rather than carrying their own copy.
 
 ### How Shiv runs commands
 
-He's on Windows PowerShell, in `C:\Users\shivk\Downloads`. His SSH key is at
-`C:\heh\keys\ssh-key-2026-10-23.key`, user `opc`.
+**Since 27 Oct he works from an iPad**: SSH in the **rootshell** app (key
+`heh-temp`, user `opc`) and **Oracle Cloud Shell** in the browser (key
+`~/.ssh/heh-helper`). Give commands to paste into one of those. His Windows
+laptop (key `C:\heh\keys\ssh-key-2026-10-23.key`) is away for repair; a
+temporary PowerShell key on another PC expires 1 Nov. Keys, fingerprints and
+recovery are in the runbook in the Project (`heh-live-ssh-recovery-runbook.md`).
 
-**Since 26 Oct his laptop is away for repair and that key is out of reach.**
-Recovery is in the runbook in the Project (`heh-live-ssh-recovery-runbook.md`):
-a temporary key with an expiry, added through the Oracle serial console,
-because Run Command never picks up commands on this VM. Long commands pasted into an
-SSH session get split by Windows, so the pattern that works is: download a
-script, copy it up, run it in one go:
+From a Windows PC, long commands pasted into SSH get split, so the pattern
+that works there is: copy a script up, run it in one go:
 
 ```
 scp -i "C:\heh\keys\ssh-key-2026-10-23.key" file1 file2 opc@79.72.79.18:~/
@@ -135,7 +155,7 @@ ssh -i "C:\heh\keys\ssh-key-2026-10-23.key" opc@79.72.79.18 "bash ~/script.sh"
 Scripts that ask for a key need `ssh -t` (so typing can be hidden). Windows
 saves re-downloads as `name_1.ext` — rename before copying.
 
-Useful checks (always give commands in this form, from PowerShell):
+Useful checks (shown in PowerShell form; on the iPad, log in first and run the part in quotes):
 
 - Why an AI call failed:
   `ssh -i "C:\heh\keys\ssh-key-2026-10-23.key" opc@79.72.79.18 "sudo docker logs supabase-edge-functions --since 10m 2>&1 | grep -iE 'claude|groq|write|check|levelup' | tail -20"`
@@ -242,7 +262,8 @@ used only when key 1 returns 429). Changed with `add-keys.sh` or
 | Ask Claude missing from the lab admin panel | (fixed 27 Oct) it shared the id `askSec` with "Asked for a room", which hides itself when the queue is empty | ids renamed to `claude*` |
 | Signed in on the dashboard but not in a game | game page on `http://`, so the `secure` cookie is hidden | tick Enforce HTTPS on that repo |
 | Lab admin panel shows "nothing here" | lab sign-in is per address; the lab moved to lab.civilinitiatives.org | sign in again on the lab |
-| "Unsupported provider" on Continue with Google (real site) | Google sign-in not switched on in the self-hosted live server since 24 Oct | add the Google provider to the live server's auth settings |
+| "Unsupported provider" on Continue with Google (real site) | (fixed 27 Oct) Google sign-in wasn't switched on in the live server | `~/add-google-live.sh` on live |
+| hehs-live.duckdns.org shows "Nothing here." | on purpose - only the website's parts are public | dashboard through an SSH tunnel, see "The live server" |
 | "Certificate Request Error" on a new subdomain | GitHub hadn't issued the certificate yet | wait, then re-save the custom domain |
 
 ## What you can't do
