@@ -214,8 +214,13 @@ used only when key 1 returns 429). Changed with `add-keys.sh` or
 `claude-key.sh` (Claude only).
 
 - Claude allowance: 60 calls a day, 800 a month across Level Up and Ask
-  Claude (table `claude_calls`, function `claude_take`); Ask Claude also
-  10 a day. Change with `CLAUDE_PER_DAY` / `CLAUDE_PER_MONTH`.
+  Claude (table `claude_calls`, function `claude_take`). Change with
+  `CLAUDE_PER_DAY` / `CLAUDE_PER_MONTH`.
+- Real admin panel, "Ask a technical question": one box with a Quick / Claude
+  switch (remembered in the browser). 15 questions a day in all (`ASK_LIMIT`
+  in both the `admin` and `askclaude` functions, counted in `ask_usage`), of
+  which at most 5 may be Claude (counted in `ask_claude_log`). Days are UTC.
+  When the 5 Claude ones are used, switch to Quick for the rest.
 - The Claude key expires on **22 November 2026**. After that Level Up uses
   Groq and Ask Claude stops until a new key is added.
 - Error "This API key is not scoped to a workspace" → make a key inside a
