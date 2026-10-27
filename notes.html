@@ -783,6 +783,8 @@ function readInvokeError(err){
 }
 
 function show(id){
+  /* Anyone not allowed in gets the site's "404 - File not found" page. */
+  if(id === "deadEnd"){ try { window.stop(); } catch(e){} location.replace("/404"); return; }
   ["deadEnd","mainPanel"].forEach(function(n){
     document.getElementById(n).hidden = (n !== id);
   });
