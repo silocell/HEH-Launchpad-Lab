@@ -107,6 +107,11 @@ rather than carrying their own copy.
   the `ocarun` user.
 - The technical explainer allows 15 questions a day, at most 5 of them Claude
   (`ASK_LIMIT` in `admin` and `askclaude`).
+- **Games on/off per account** (since 27 Oct): admin panel → Games. Uses the
+  `gamesaccess` function (owner only) to write `public.game_access`
+  (`user_id`, `allowed`, `reason`). Every game page asks `my_games()`; a new
+  account has no row, so it sees "Games aren't switched on for your account
+  yet" until it's turned on there.
 
 ## The lab server
 
