@@ -15,7 +15,8 @@ DNS at GoDaddy, pages on GitHub Pages with HTTPS.
 
 | Address | Repository | What it is |
 |---|---|---|
-| civilinitiatives.org | `HEH-Homework` (`main`) | The dashboard pupils use. Admin panel at `/notes`. Server: `hehs-live.duckdns.org`. |
+| civilinitiatives.org | `HEH-Homework` (`main`) | The dashboard pupils use. Server: `hehs-live.duckdns.org`. |
+| maintenance.civilinitiatives.org | `HEH-Maintenance-` | The admin panel (since 27 Oct; `/notes` on the main site forwards here). Its scripts and styles load from the main site. |
 | lab.civilinitiatives.org | `HEH-Launchpad-Lab` | Test copy, made-up pupils. Purple bar, flask icon. Server: `hehs.duckdns.org`. |
 | gaterun.civilinitiatives.org | `HEH-Launchpad-Game` | Gate Run, the Three.js driving game. |
 | games.civilinitiatives.org | `HEH-Launchpad-Scratch` | The six Scratch games. |
@@ -61,8 +62,10 @@ Every page uses `/favicon.png` (the school crest) as its tab icon.
 
 - `index.html` – the dashboard: links to school sites, to-do list, year chat,
   noticeboard, "Explain a topic" (AI), "Look it up" (Wikipedia), word of the day.
-- `notes.html` – the admin panel. Opens only for Shiv's own account; the
-  server checks the signed-in account, so editing the page changes nothing.
+- The admin panel is `index.html` in `HEH-Maintenance-` (maintenance.civilinitiatives.org).
+  Main-site `notes.html` only forwards there. Opens only for Shiv's own
+  account; the server checks the signed-in account, so editing the page
+  changes nothing.
 - `games.html` – every game in one place; the dashboard's Games panel links to it.
 
 The game pages live in `HEH-Launchpad-Learn` (learn.civilinitiatives.org):
