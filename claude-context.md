@@ -22,10 +22,14 @@ DNS at GoDaddy, pages on GitHub Pages with HTTPS.
 | gaterun.civilinitiatives.org | `HEH-Launchpad-Game` | Gate Run, the Three.js driving game. |
 | games.civilinitiatives.org | `HEH-Launchpad-Scratch` | The six Scratch games. |
 | learn.civilinitiatives.org | `HEH-Launchpad-Learn` | Level Up, Times Table Tycoon, Word Dragons, Battle Stories. |
+| play.civilinitiatives.org | `HEH-Play` | The games page (every game in one place). `games.html` on the main site forwards here. |
+| arcade.civilinitiatives.org | `HEH-Arcade` (GPL-3.0) | The Arcade. `arcade.html` on the main site forwards here. |
+| doodles.civilinitiatives.org | `HEH-Doodles` (GPL-3.0) | 14 doodles (Bubble Tea, Snake, Hop Runner, Bomb Squad…). Open one with `#boba`, `#snake`… Best scores in localStorage `hl.x.best.*`. |
 | silocell.github.io | `silocell.github.io` | Shiv's portfolio page. |
 
-`maintenance.civilinitiatives.org` is planned for the admin panel but has
-no DNS record yet.
+Every one of these has DNS (CNAME to silocell.github.io at GoDaddy) and
+Enforce HTTPS ticked. Each game site has the crest `404.html`, so the games
+lock's `/404` dead end works there too.
 
 The lab and the real site are the same files. A page decides it is the lab
 from its address — hostname starting `lab.`, or the old path
@@ -49,6 +53,15 @@ invisible on plain `http://` — **Enforce HTTPS** must be ticked on every repo.
 
 The lab does not load `auth-store.js`: its session stays in localStorage on
 `lab.civilinitiatives.org`, so you sign in to the lab separately.
+
+### Light/dark across the subdomains
+
+Same problem as sign-in: `localStorage` belongs to one address. The
+dashboard (and the admin/helper panels) also write the choice to a cookie
+`hl_theme` (`dark` / `light` / `system`) for `.civilinitiatives.org`, and
+every page's first `<script>` reads that cookie before localStorage. Across
+devices it follows the account: the dashboard saves it in `user_metadata.theme`
+and applies it at sign-in.
 
 ### Repositories and licences
 
@@ -261,6 +274,33 @@ used only when key 1 returns 429). Changed with `add-keys.sh` or
   workspace in the Claude Console, or set `ANTHROPIC_WORKSPACE_ID`.
 - The lab's explain and chat use a **fake AI** (`LAB_FAKE_AI=1`) so testing
   them costs nothing. Level Up and Ask Claude use real AI.
+
+### Profiles (27 Oct)
+
+The dashboard's top bar has a profile button: your picture, name and
+email. The picture is built from parts (background, character, frame,
+hat) - no photo uploads. Some parts are free; the rest cost **Level Up
+points** (`levelup_progress.pts`, the same points as Level Up's own shop).
+- Front end: `profile.js` on the main site. A copy is cached in
+  localStorage `hl.profile`.
+- Server: the `profile` function (`get` / `use` / `buy`) holds the shop and
+  prices. Table `profile_look(user_id, look, owned)`, no policies.
+  `profile_spend(u, cost)` takes points off in one statement only if there
+  are enough (service role only).
+- If points ever look wrong after buying: Level Up saves its whole row
+  after each answer, so an answer saved at the very same moment as a
+  purchase can put the spent points back. Harmless, just odd.
+
+### Diagnostics (admin panel)
+
+"Run checks" runs the server's own checks, then the newer parts: games
+lock, games switches, Helper/Admin tags, school-account switch (red if no
+secret password is set), profiles, the `hl_theme` cookie, the ask
+allowance, and every site address (plus the crest 404). "Test Claude"
+calls `askclaude` with `action:"diag"`: it checks the key and this
+briefing, then asks Claude to say OK. It does **not** use one of the 5
+Claude questions or the 15 a day - only the server's own Claude allowance
+(`claude_take`).
 
 ## Known past problems (and what fixed them)
 
