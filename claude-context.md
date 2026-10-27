@@ -291,6 +291,29 @@ points** (`levelup_progress.pts`, the same points as Level Up's own shop).
   after each answer, so an answer saved at the very same moment as a
   purchase can put the spent points back. Harmless, just odd.
 
+### Launchpad Pounds (28 Oct)
+
+A second, rarer currency next to Level Up points. Every learning game reports
+answers through `learn_record` -> `learn_skills`; a trigger (`pound_tally`)
+counts new right answers into `pound_days` (person, London day, subject).
+The `profile` function turns that into Pounds: 20 right in a subject = 1,
+at most 2 per subject and 5 a day. Achievements (`ACH` in the profile
+function, stats from `pound_stats(u)`) pay out once each, and some unlock
+achievement-only picture parts. All of it is in `pounds_ledger`
+(`day:…`, `ach:…`, `buy:…`); balance = sum. `pounds_spend()` spends
+safely. Picture parts can cost points (`cost`), Pounds (`pounds`, marked
+Exclusive) or come from an achievement (`ach`). `learn.js` asks
+`profile {action:"pounds"}` after answers are filed and shows "+🪙1".
+Map Quest, Battle Stories and flash cards report from the page, so the
+daily caps are what stop cheating there.
+
+### Give points (admin panel)
+
+Only shivkforindia@gmail.com (not the school account, helpers or the
+demo). `givepoints` function + `grant_points()`: at most 2,500 points in
+total and 500 per person, both over the last 3 days (rolling). Every gift
+is in `points_grants`.
+
 ### Diagnostics (admin panel)
 
 "Run checks" runs the server's own checks, then the newer parts: games
